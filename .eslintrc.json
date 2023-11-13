@@ -1,0 +1,29 @@
+{
+  "extends": [
+    "react-app",
+    "eslint:recommended",
+    "plugin:storybook/recommended",
+    "plugin:storybook/recommended"
+  ],
+  "plugins": [
+    "jest"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "**/*.test.(js|ts|jsx|tsx)"
+      ],
+      "env": {
+        "jest": true
+      }
+    }
+  ],
+  "rules": {
+    "indent": [
+      "error",
+      2
+    ],
+    "no-unused-vars": "warn",
+    "no-undef": 0
+  }
+}

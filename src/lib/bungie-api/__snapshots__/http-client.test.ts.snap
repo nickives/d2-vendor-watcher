@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`check Request builder for [Function getItem] 1`] = `
+Object {
+  "body": undefined,
+  "headers": Headers {
+    "map": Object {
+      "x-api-key": "123",
+    },
+  },
+  "method": "GET",
+  "url": "https://www.bungie.net/Platform/Destiny2/3/Profile/123456/Item/0987654321/?components=7",
+}
+`;
+
+exports[`check Request builder for [Function getLinkedProfiles] 1`] = `
+Object {
+  "body": undefined,
+  "headers": Headers {
+    "map": Object {
+      "x-api-key": "123",
+    },
+  },
+  "method": "GET",
+  "url": "https://www.bungie.net/Platform/Destiny2/3/Profile/123456/LinkedProfiles/?getAllMemberships=true",
+}
+`;
+
+exports[`check Request builder for [Function getProfile] 1`] = `
+Object {
+  "body": undefined,
+  "headers": Headers {
+    "map": Object {
+      "x-api-key": "123",
+    },
+  },
+  "method": "GET",
+  "url": "https://www.bungie.net/Platform/Destiny2/3/Profile/123456/?components=1%2C2%2C3",
+}
+`;
+
+exports[`check Request builder for [Function getVendor] 1`] = `
+Object {
+  "body": undefined,
+  "headers": Headers {
+    "map": Object {
+      "x-api-key": "123",
+    },
+  },
+  "method": "GET",
+  "url": "https://www.bungie.net/Platform/Destiny2/3/Profile/123456/Character/1234658790/Vendors/45674576/?components=400%2C402%2C300%2C301%2C304%2C305%2C306%2C307%2C600%2C308%2C310%2C309",
+}
+`;
+
+exports[`check Request builder for [Function pullFromPostmaster] 1`] = `
+Object {
+  "body": undefined,
+  "headers": Headers {
+    "map": Object {
+      "content-type": "application/json",
+      "x-api-key": "123",
+    },
+  },
+  "method": "POST",
+  "url": "https://www.bungie.net/Platform/Destiny2/Actions/Items/PullFromPostmaster/",
+}
+`;
