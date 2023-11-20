@@ -14,6 +14,7 @@ export async function getManifest($http: HttpClient) {
       'DestinyCollectibleDefinition',
       'DestinyInventoryItemDefinition',
       'DestinyItemCategoryDefinition',
+      'DestinyPresentationNodeDefinition',
       'DestinyVendorDefinition',
       'DestinyVendorGroupDefinition',
     ],

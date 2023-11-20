@@ -1,5 +1,4 @@
 import { DestinyItemSubType, DestinyItemType } from "bungie-api-ts-no-const-enum-local/destiny2";
-import { VwManifest } from "../../lib/getManifest";
 import { VendorGroup } from "./createVendor";
 import { D2Vendor, D2VendorCategory } from "./Vendor";
 
