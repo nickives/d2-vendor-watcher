@@ -52,14 +52,11 @@ const VendorCategory = ({ name, items, ownedItemHashes }: Omit<D2VendorCategory,
 
 const VendorItem = ({ item, owned }: { item: D2VendorCategory['items'][0], owned: boolean}) =>(
   <div className="border-dashed border-2 border-sky-500">
-    {
-      owned
-        ? <div>OWNED</div>
-        : <div>NOT OWNED</div>
-    }
-    <img src={`https://bungie.net${item.displayProperties.icon}`} alt={item.displayProperties.name}/>
-    <div>{item.hash}</div>
-    <div>{item.collectibleHash}</div>
+    <img
+      src={`https://bungie.net${item.displayProperties.icon}`}
+      alt={item.displayProperties.name}
+      className={ classNames("h-auto w-18", { "opacity-30": owned })}
+    />
   </div>
 );
 
