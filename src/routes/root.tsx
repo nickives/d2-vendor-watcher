@@ -126,8 +126,8 @@ const Root = (): React.ReactElement => {
         vendorsState
           ? vendorsState.map(vendorGroup => (
             <div key={vendorGroup.name}>
-              <div className="text-2xl">{vendorGroup.name}</div>
-              <div>{vendorGroup.vendors.map(v => <Vendor className="mt-5" key={v.def.hash} vendor={v} ownedItemHashes={ownedItemsHashes} />)} </div>
+              <div className="text-2xl mt-5">{vendorGroup.name}</div>
+              <div>{vendorGroup.vendors.map(v => <Vendor className="mt-1" key={v.def.hash} vendor={v} ownedItemHashes={ownedItemsHashes} />)} </div>
             </div>
           ))
           : <LoadingSpinner />
