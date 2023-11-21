@@ -4,6 +4,8 @@ import {
   DestinyVendorDefinition,
 } from "bungie-api-ts-no-const-enum-local/destiny2";
 import classNames from 'classnames';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 
 export interface D2VendorCategory {
   name: string;
@@ -51,12 +53,17 @@ const VendorCategory = ({ name, items, ownedItemHashes }: Omit<D2VendorCategory,
 }
 
 const VendorItem = ({ item, owned }: { item: D2VendorCategory['items'][0], owned: boolean}) =>(
-  <div className="border-dashed border-2 border-sky-500">
+  <div className="relative border-dashed border-2 border-sky-500">
     <img
       src={`https://bungie.net${item.displayProperties.icon}`}
       alt={item.displayProperties.name}
-      className={ classNames("h-auto w-18", { "opacity-30": owned })}
+      className={ classNames("h-auto w-18 z-0", { "opacity-30": owned })}
     />
+    {
+      owned 
+        ? <FontAwesomeIcon className="absolute bottom-2 end-2 z-1" icon={solid("circle-check")} style={{color: "#16d309",}} />
+        : <></>
+    }
   </div>
 );
 
