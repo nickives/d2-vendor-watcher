@@ -23,7 +23,6 @@ const ManifestContext = React.createContext<TManifestContext | undefined>(undefi
 export const ManifestProvider = (
   { children, value }: React.PropsWithChildren<{ value?: IManifest }>,
 ): React.ReactElement => {
-  // have to check for window even with use client...
   const initialState = value || {};
   const [manifestState, updateManifest] = useState<IManifest>(initialState);
   return (
