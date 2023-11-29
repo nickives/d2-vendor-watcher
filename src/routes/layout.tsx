@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Await, Outlet, defer, useAsyncValue, useLoaderData } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Outlet } from 'react-router-dom';
 import Header from '../components/Header/Header';
 import { useSession } from '../components/SessionContext/SessionContext';
 import { unauthenticatedHttpClient } from '../lib/bungie-api/bungie-service-helper';

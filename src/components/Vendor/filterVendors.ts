@@ -1,6 +1,7 @@
 import { DestinyItemSubType, DestinyItemType } from "bungie-api-ts-no-const-enum-local/destiny2";
 import { VendorGroup } from "./createVendor";
-import { D2Vendor, D2VendorCategory } from "./Vendor";
+import { D2Vendor } from "./Vendor";
+import { D2VendorCategory } from "./D2VendorCategory";
 
 export function filterVendorGroups(vendorGroups: VendorGroup[]): VendorGroup[] {
   return vendorGroups.map(group => {
