@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
-import { D2VendorCategory } from "./D2VendorCategory";
+import { D2VendorCategory } from "./Vendor";
 
 
 export const VendorItem = ({ item, owned }: { item: D2VendorCategory['items'][0]; owned: boolean; }) => (

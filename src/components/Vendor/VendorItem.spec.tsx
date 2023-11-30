@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-import renderer from 'react-test-renderer';
 import { DestinyInventoryItemDefinition } from 'bungie-api-ts-no-const-enum-local/destiny2';
 import { VendorItem } from './VendorItem';
 import importedItem from './vendorItem.json';
