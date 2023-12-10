@@ -3,40 +3,17 @@ import {
   getProfile as getProfileApi,
   getVendors,
   DestinyComponentType,
-  ServerResponse,
-  DestinyProfileResponse,
-  DestinyCollectibleState,
   BungieMembershipType,
 } from "bungie-api-ts-no-const-enum-local/destiny2";
 import { authenticatedHttpClient } from "../lib/bungie-api/bungie-service-helper";
 import { useSession } from "../components/SessionContext/SessionContext";
 import { getLinkedAccounts } from "../lib/bungie-api/destiny2-api";
-import Vendor from "../components/Vendor/Vendor";
-import { VendorGroup, createVendors } from "../components/Vendor/createVendor";
+import Vendor, { ID2Vendor } from "../components/Vendor/Vendor";
+import { VendorGroup, createVendor, createVendorGroups, filterSubVendors, processVendorsResponse } from "../components/Vendor/vendor-util";
 import { useManifest } from "../components/ManifestContext/ManifestContext";
-import { filterVendorGroups } from "../components/Vendor/filterVendors";
+import { filterVendorGroups, filterVendorItems } from "../components/Vendor/vendor-util";
 import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
-import { VwManifest } from "../lib/getManifest";
-
-function findOwnedItems(response: ServerResponse<DestinyProfileResponse>, manifest: VwManifest): number[] {
-  const profileCollectables = response.Response.profileCollectibles.data?.collectibles;
-  const characterCollectablesDict = response.Response.characterCollectibles.data;
-  const collectableComponents = characterCollectablesDict
-    ? Object.values(characterCollectablesDict).map(c => c.collectibles)
-    : [];
-  if (profileCollectables) collectableComponents.push(profileCollectables);
-
-  return collectableComponents.flatMap(c => Object.entries(c)
-    .filter(entry => {
-      return !(entry[1].state & DestinyCollectibleState.NotAcquired);
-    })
-    .map(entry => {
-      // we know this conversion is safe, because the input key from collectibles is a number
-      const itemHash = manifest['DestinyCollectibleDefinition'][entry[0] as unknown as number].itemHash;
-      return itemHash;
-    })
-  );
-}
+import { findOwnedItems } from "../lib/findOwnedItems";
 
 async function getProfile(membershipId: string, membershipType: BungieMembershipType) {
   return getProfileApi(authenticatedHttpClient, {
@@ -48,7 +25,8 @@ async function getProfile(membershipId: string, membershipType: BungieMembership
 
 const Root = (): React.ReactElement => {
   const {user, membership, updateSessionState} = useSession();
-  const [vendorsState, updateVendorsState] = useState<VendorGroup[] | undefined>(undefined);
+  const [vendorGroups, updateVendorGroups] = useState<VendorGroup[]>([]);
+  const [allVendors, updateAllVendors] = useState<ID2Vendor[]>([]);
   const [ownedItemsHashes, updateOwnedItemsHashes] = useState<Set<number>>(new Set());
   const { manifest } = useManifest();
 
@@ -79,7 +57,6 @@ const Root = (): React.ReactElement => {
     // this will only run after initial log in - not after browser refresh and
     // restoring state from localStorage
     if (!user && membership) {
-      console.log('effect');
       getUser();
     }
   }, [user, updateSessionState, updateOwnedItemsHashes, membership, manifest]);
@@ -87,11 +64,10 @@ const Root = (): React.ReactElement => {
   useEffect(() => {
     async function getCollections() {
       const profile = await getProfile(membership!.membershipId, membership!.membershipType);
-
       const ownedItems = findOwnedItems(profile, manifest!);
-      updateOwnedItemsHashes(new Set(ownedItems));
+      updateOwnedItemsHashes(ownedItems);
+      // console.log(`ownedItem.has(1950526212): ${ownedItems.has(1950526212)}`);
     }
-    console.log('effect2');
     if (user && membership && manifest) {
       getCollections();
     }
@@ -99,7 +75,7 @@ const Root = (): React.ReactElement => {
 
   useEffect(() => {
     async function getVendorData() {
-      const vendorData = await getVendors(authenticatedHttpClient, {
+      const data = await getVendors(authenticatedHttpClient, {
         characterId: user?.characterIds[0]!,
         components: [
           DestinyComponentType.Vendors,
@@ -110,8 +86,18 @@ const Root = (): React.ReactElement => {
         destinyMembershipId: membership?.membershipId!,
         membershipType: membership?.membershipType!,
       });
-      const vendors = filterVendorGroups(createVendors(vendorData.Response, manifest!));
-      updateVendorsState(vendors);
+      const vendors = processVendorsResponse(data.Response, manifest!)
+        .map(vendorArgs => createVendor(...vendorArgs))
+        .map(filterVendorItems)
+        .filter(v => !v.isEmpty())
+        .map((vendor, _, array) => filterSubVendors(vendor, array));
+  
+      updateAllVendors(vendors);
+      
+      const groups = data.Response.vendorGroups.data?.groups;
+      if (!groups) throw new Error("Missing vendor groups from response");
+      const filteredVendors = filterVendorGroups(createVendorGroups(groups, vendors, manifest!));
+      updateVendorGroups(filteredVendors);
     }
 
     if (user?.characterIds && manifest) {
@@ -123,11 +109,19 @@ const Root = (): React.ReactElement => {
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div>Owned: {ownedItemsHashes?.size}</div>
       {
-        vendorsState
-          ? vendorsState.map(vendorGroup => (
+        vendorGroups.length !== 0
+          ? vendorGroups.map(vendorGroup => (
             <div key={vendorGroup.name}>
               <div className="text-2xl mt-5">{vendorGroup.name}</div>
-              <div>{vendorGroup.vendors.map(v => <Vendor className="mt-1" key={v.def.hash} vendor={v} ownedItemHashes={ownedItemsHashes} />)} </div>
+              <div>{vendorGroup.vendors.filter(v => !v.isEmpty()).map(v =>
+                <Vendor
+                  className="mt-1"
+                  key={v.def.hash}
+                  vendor={v}
+                  allVendors={allVendors}
+                  ownedItemHashes={ownedItemsHashes}
+                />
+              )} </div>
             </div>
           ))
           : <LoadingSpinner />

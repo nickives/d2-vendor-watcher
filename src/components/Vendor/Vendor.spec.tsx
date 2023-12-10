@@ -1,14 +1,14 @@
 import { render, screen, within } from '@testing-library/react';
-import Vendor, { D2Vendor } from './Vendor';
+import Vendor, { ID2Vendor } from './Vendor';
 import testVendorImport from './testVendor.json';
-const testVendor = testVendorImport as unknown as D2Vendor;
+const testVendor = testVendorImport as unknown as ID2Vendor;
 const ownedItemHashes = new Set<number>()
   .add(1012434138)
   .add(2609397864)
   .add(1781477733);
 
 describe('Vendor renders', () => {
-  const component = <Vendor vendor={testVendor} ownedItemHashes={ownedItemHashes} />;
+  const component = <Vendor vendor={testVendor} ownedItemHashes={ownedItemHashes} allVendors={[]} />;
   test('Displays name once', () => {
     render(component);
     const nameElement = screen.getByText(new RegExp(testVendor.def.displayProperties.name, "i"));

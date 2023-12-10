@@ -5,8 +5,8 @@
 // https://github.com/Bungie-net/api/issues/1780
 // https://github.com/Bungie-net/api/issues/366
 // possibly more too
-import { D2Vendor } from "./Vendor";
-export const testVendor: D2Vendor = {
+import { ID2Vendor } from "./Vendor";
+export const testVendor: ID2Vendor = {
   "component": {
     "canPurchase": true,
     "vendorLocationIndex": 0,
